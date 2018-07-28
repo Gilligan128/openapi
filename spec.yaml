@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+  title: Pet Store
+  description: A place to buy pets
+  version: "1.0"
+  contact:
+    email: mhenke@gmail.com
+servers: 
+  - url: https://qa.petstore.com
+    description: our QA environment
+  - url: https://www.petstore.com
+    description: the real thing
+tags:
+  - name: Pet
+    description: How to manage pets at the store
+paths:
+  /pets/{store}:
+    get:
+      tags: 
+        - Pet
+      description: this gets all the pets you can buy at a store
+      parameters: 
+        - name: store
+          description: the name of the store you work at
+          required: true
+          in: path
+          schema:
+            type: string
+          example: the-good-store
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pet'
+        '403':
+          description: user unauthorized
+    post:
+      tags: 
+          - Pet
+      description: this adds a new pet to the store
+      parameters: 
+        - name: store
+          description: the name of the store you work at
+          required: true
+          in: path
+          schema:
+            type: string
+          example: the-good-store 
+      requestBody:
+        content:
+          application/json:
+             schema:
+                type: object
+                required:
+                  - name
+                  - type
+                properties: 
+                  name:
+                    type: string
+                    example: Henry
+                  type:
+                    type: string
+                    enum:
+                      - dog
+                      - cat
+                  age:
+                    type: integer
+                    example: 5
+                    description: how old is the pet
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pet'
+components:
+  schemas:
+    pet:
+      title: info about a pet
+      type: object
+      properties: 
+        name:
+          type: string
+          example: Henry
+        type:
+          $ref: '#/components/schemas/petType'
+        age:
+          type: integer
+          example: 5
+          description: how old is the pet
+    petType:
+      title: the type of animal
+      type: string
+      enum:
+        - dog
+        - cat
+          
+        
+    
+  
+
+  
+  
